@@ -61,12 +61,21 @@ install ( TARGETS glew glew_s glewmx glewmx_s
           ARCHIVE DESTINATION lib${LIB_SUFFIX}
 )
 
+set(ADDITIONAL_LIBRARIES "")
+
+if (UNIX)
+	find_package(X11)
+	list(APPEND ADDITIONAL_LIBRARIES
+		${X11_X11_LIB}
+	)
+endif()
+
 if (BUILD_UTILS)
   add_executable (glewinfo ${GLEW_DIR}/src/glewinfo.c)
-  target_link_libraries (glewinfo glew)
+  target_link_libraries (glewinfo glew ${ADDITIONAL_LIBRARIES})
 
   add_executable (visualinfo ${GLEW_DIR}/src/visualinfo.c)
-  target_link_libraries (visualinfo glew)
+  target_link_libraries (visualinfo glew ${ADDITIONAL_LIBRARIES})
 
   install ( TARGETS glewinfo visualinfo
             DESTINATION bin)
